@@ -23,6 +23,7 @@ API ASP.NET 8 para gerenciamento de uma unica guild de MU Online, com cadastro c
 - [x] Endpoint `GET /api/users` implementado.
 - [x] Endpoint `GET /api/cla-codes` implementado.
 - [x] Endpoint `PATCH /api/users/{id}/role` implementado.
+- [x] Modulo de personagens implementado com entidades, services, controller, migration e imagens default.
 - [x] Tratamento global de erros iniciado com middleware.
 
 ### Ainda falta no backend
@@ -157,9 +158,13 @@ API ASP.NET 8 para gerenciamento de uma unica guild de MU Online, com cadastro c
 - [x] Tabela `Users`
 - [x] Tabela `ClaCodes`
 - [x] Tabela `RoleChangeHistories`
+- [x] Tabela `Characters`
+- [x] Tabela `CharacterImages`
 - [x] Indice unico para `Username`
 - [x] Indice unico para `Email`
 - [x] Relacionamentos entre criador/usuario do `ClaCode`
+- [x] Relacionamento entre `User` e `Characters`
+- [x] Relacionamento entre `Character` e `CharacterImages`
 
 ## O que falta para fechar o MVP backend
 
@@ -181,7 +186,7 @@ API ASP.NET 8 para gerenciamento de uma unica guild de MU Online, com cadastro c
 - [ ] bloqueio de listagem de inativos para `AssistantMaster`
 - [ ] Criar testes de integracao dos fluxos principais.
 
-## Proximo modulo: personagens
+## Modulo de personagens
 
 ### Objetivo
 
@@ -189,58 +194,71 @@ Cada usuario podera cadastrar e gerenciar personagens que representam seus chars
 
 ### Regras de negocio dos personagens
 
-- [ ] Cada usuario pode ter no maximo `5` personagens ativos.
-- [ ] Personagens inativos nao contam no limite de `5` ativos.
-- [ ] Um personagem inativo so pode ser reativado se houver slot livre.
-- [ ] Apenas personagens ativos aparecem no carrossel principal do painel do usuario.
-- [ ] Deve existir endpoint para consultar personagens inativos do usuario.
-- [ ] Cada personagem pertence a um unico usuario.
-- [ ] Cada personagem deve ter uma classe valida do jogo.
-- [ ] Cada personagem deve ter uma `RoleTag` fixa para identificacao visual.
-- [ ] Cada personagem deve ter um `PrioritySlot` de `1` a `5` para definir a ordem de exposicao.
-- [ ] Nao pode existir mais de um personagem ativo do mesmo usuario no mesmo `PrioritySlot`.
-- [ ] `LastKnownLevel` deve aceitar valores entre `0` e `400`.
-- [ ] Ao criar o personagem, uma imagem padrao deve ser vinculada.
-- [ ] O usuario podera depois alterar nivel, prioridade, imagem e status do personagem.
+- [x] Cada usuario pode ter no maximo `5` personagens ativos.
+- [x] Personagens inativos nao contam no limite de `5` ativos.
+- [x] Um personagem inativo so pode ser reativado se houver slot livre.
+- [x] Apenas personagens ativos aparecem no retorno padrao de `GET /api/characters/me`.
+- [x] Existe endpoint para consultar personagens inativos do usuario.
+- [x] Cada personagem pertence a um unico usuario.
+- [x] Cada personagem deve ter uma classe valida do jogo.
+- [x] Cada personagem deve ter uma `RoleTag` fixa para identificacao visual.
+- [x] Cada personagem deve ter um `PrioritySlot` de `1` a `5` para definir a ordem de exposicao.
+- [x] Nao pode existir mais de um personagem ativo do mesmo usuario no mesmo `PrioritySlot`.
+- [x] `LastKnownLevel` deve aceitar valores entre `0` e `400`.
+- [x] Ao criar o personagem, uma imagem padrao por classe deve ser vinculada.
+- [x] O usuario pode alterar nivel, prioridade, imagem e status do personagem.
 
 ### Classes de personagem
 
-- [ ] `DarkWizard`
-- [ ] `DarkKnight`
-- [ ] `FairyElf`
-- [ ] `MagicGladiator`
-- [ ] `DarkLord`
+- [x] `DarkWizard`
+- [x] `DarkKnight`
+- [x] `FairyElf`
+- [x] `MagicGladiator`
+- [x] `DarkLord`
 
 ### Tags fixas de personagem
 
-- [ ] `PVP`
-- [ ] `PVM`
-- [ ] `BUFF`
-- [ ] `HIBRIDO`
+- [x] `PVP`
+- [x] `PVM`
+- [x] `BUFF`
+- [x] `HIBRIDO`
 
-### Estrutura prevista do personagem
+### Estrutura atual do personagem
 
-- [ ] `Id`
-- [ ] `UserId`
-- [ ] `Name`
-- [ ] `CharacterClass`
-- [ ] `RoleTag`
-- [ ] `PrioritySlot`
-- [ ] `ImageUrl`
-- [ ] `LastKnownLevel`
-- [ ] `IsActive`
-- [ ] `CreatedAt`
-- [ ] `UpdatedAt`
+- [x] `Id`
+- [x] `UserId`
+- [x] `Name`
+- [x] `CharacterClass`
+- [x] `RoleTag`
+- [x] `PrioritySlot`
+- [x] `CurrentImageId`
+- [x] `ImageUrl` via `CharacterImages`
+- [x] `LastKnownLevel`
+- [x] `IsActive`
+- [x] `CreatedAt`
+- [x] `UpdatedAt`
 
-### Endpoints planejados para personagens
+### Endpoints implementados para personagens
 
-- [ ] `POST /api/characters`
-- [ ] `GET /api/characters/me`
-- [ ] `GET /api/characters/me?status=inactive`
-- [ ] `PATCH /api/characters/{id}`
-- [ ] `PATCH /api/characters/{id}/deactivate`
-- [ ] `PATCH /api/characters/{id}/reactivate`
-- [ ] `GET /api/characters/guild-board`
+- [x] `POST /api/characters`
+- [x] `GET /api/characters/me`
+- [x] `GET /api/characters/me?status=inactive`
+- [x] `PATCH /api/characters/{id}`
+- [x] `PATCH /api/characters/{id}/deactivate`
+- [x] `PATCH /api/characters/{id}/reactivate`
+- [x] `GET /api/characters/guild-board`
+
+### Recursos implementados no modulo de personagens
+
+- [x] Entidade `Character`
+- [x] Entidade `CharacterImage`
+- [x] Enum `CharacterClass`
+- [x] Enum `CharacterRoleTag`
+- [x] Service `CharacterService`
+- [x] Controller `CharactersController`
+- [x] Migration `AddCharactersModule`
+- [x] Imagens default por classe em `wwwroot/images/characters/defaults`
+- [x] Pasta preparada para imagens futuras do usuario em `wwwroot/images/characters/uploads`
 
 ## Frontend
 
@@ -267,7 +285,7 @@ Cada usuario podera cadastrar e gerenciar personagens que representam seus chars
 3. Adicionar validacoes de entrada mais fortes.
 4. Adicionar logs melhores.
 5. Criar testes automatizados.
-6. Modelar o modulo de personagens no backend.
+6. Validar manualmente no Swagger todos os endpoints de personagens.
 7. Iniciar o frontend.
 
 ## Referencias oficiais
