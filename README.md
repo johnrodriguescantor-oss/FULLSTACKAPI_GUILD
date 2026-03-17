@@ -28,9 +28,10 @@ API ASP.NET 8 para gerenciamento de uma unica guild de MU Online, com cadastro c
 ### Ainda falta no backend
 
 - [ ] Padronizar completamente os controllers para usar o tratamento global de erros.
-- [ ] Aplicar a regra final de no maximo `2 DEV`s` e no minimo `1 DEV` ativo.
-- [ ] Implementar inativacao de usuarios.
-- [ ] Implementar listagem filtrada de usuarios por status e permissao.
+- [x] Aplicar a regra final de no maximo `2 DEV`s` e no minimo `1 DEV` ativo.
+- [x] Implementar inativacao de usuarios.
+- [x] Implementar listagem filtrada de usuarios por status e permissao.
+- [ ] Melhorar mensagens e padrao de erros.
 - [ ] Melhorar validacoes de entrada.
 - [ ] Criar logs melhores.
 - [ ] Criar testes automatizados.
@@ -108,14 +109,16 @@ API ASP.NET 8 para gerenciamento de uma unica guild de MU Online, com cadastro c
 - [x] `GET /api/cla-codes`
 - [x] `GET /api/users/me`
 - [x] `GET /api/users`
+- [x] `GET /api/users?status=active`
+- [x] `GET /api/users?status=inactive`
+- [x] `GET /api/users?status=all`
 - [x] `PATCH /api/users/{id}/role`
+- [x] `PATCH /api/users/{id}/deactivate`
 
 ## Endpoints planejados para a proxima fase
 
-- [ ] `GET /api/users?status=active`
-- [ ] `GET /api/users?status=inactive`
-- [ ] `GET /api/users?status=all`
-- [ ] `PATCH /api/users/{id}/deactivate`
+- [ ] Definir se os filtros de status continuarao por query string ou se havera endpoints dedicados no futuro.
+- [ ] Refinar a documentacao Swagger para destacar melhor as regras de permissao por cargo.
 
 ## Estrutura atual do backend
 
@@ -161,9 +164,9 @@ API ASP.NET 8 para gerenciamento de uma unica guild de MU Online, com cadastro c
 ## O que falta para fechar o MVP backend
 
 - [ ] Finalizar a limpeza dos controllers para depender mais do middleware global.
-- [ ] Aplicar a regra de no minimo `1 DEV` ativo e no maximo `2 DEV`s` ativos.
-- [ ] Implementar inativacao de usuarios com as regras de hierarquia.
-- [ ] Implementar filtro de listagem de usuarios por status respeitando o perfil do solicitante.
+- [x] Aplicar a regra de no minimo `1 DEV` ativo e no maximo `2 DEV`s` ativos.
+- [x] Implementar inativacao de usuarios com as regras de hierarquia.
+- [x] Implementar filtro de listagem de usuarios por status respeitando o perfil do solicitante.
 - [ ] Melhorar mensagens e padrao de erros.
 - [ ] Adicionar validacoes de entrada mais fortes.
 - [ ] Criar testes unitarios para:
@@ -178,6 +181,67 @@ API ASP.NET 8 para gerenciamento de uma unica guild de MU Online, com cadastro c
 - [ ] bloqueio de listagem de inativos para `AssistantMaster`
 - [ ] Criar testes de integracao dos fluxos principais.
 
+## Proximo modulo: personagens
+
+### Objetivo
+
+Cada usuario podera cadastrar e gerenciar personagens que representam seus chars dentro do jogo. Esses personagens aparecerao em um painel proprio do usuario e tambem em um mural geral da guild agrupado por usuario.
+
+### Regras de negocio dos personagens
+
+- [ ] Cada usuario pode ter no maximo `5` personagens ativos.
+- [ ] Personagens inativos nao contam no limite de `5` ativos.
+- [ ] Um personagem inativo so pode ser reativado se houver slot livre.
+- [ ] Apenas personagens ativos aparecem no carrossel principal do painel do usuario.
+- [ ] Deve existir endpoint para consultar personagens inativos do usuario.
+- [ ] Cada personagem pertence a um unico usuario.
+- [ ] Cada personagem deve ter uma classe valida do jogo.
+- [ ] Cada personagem deve ter uma `RoleTag` fixa para identificacao visual.
+- [ ] Cada personagem deve ter um `PrioritySlot` de `1` a `5` para definir a ordem de exposicao.
+- [ ] Nao pode existir mais de um personagem ativo do mesmo usuario no mesmo `PrioritySlot`.
+- [ ] `LastKnownLevel` deve aceitar valores entre `0` e `400`.
+- [ ] Ao criar o personagem, uma imagem padrao deve ser vinculada.
+- [ ] O usuario podera depois alterar nivel, prioridade, imagem e status do personagem.
+
+### Classes de personagem
+
+- [ ] `DarkWizard`
+- [ ] `DarkKnight`
+- [ ] `FairyElf`
+- [ ] `MagicGladiator`
+- [ ] `DarkLord`
+
+### Tags fixas de personagem
+
+- [ ] `PVP`
+- [ ] `PVM`
+- [ ] `BUFF`
+- [ ] `HIBRIDO`
+
+### Estrutura prevista do personagem
+
+- [ ] `Id`
+- [ ] `UserId`
+- [ ] `Name`
+- [ ] `CharacterClass`
+- [ ] `RoleTag`
+- [ ] `PrioritySlot`
+- [ ] `ImageUrl`
+- [ ] `LastKnownLevel`
+- [ ] `IsActive`
+- [ ] `CreatedAt`
+- [ ] `UpdatedAt`
+
+### Endpoints planejados para personagens
+
+- [ ] `POST /api/characters`
+- [ ] `GET /api/characters/me`
+- [ ] `GET /api/characters/me?status=inactive`
+- [ ] `PATCH /api/characters/{id}`
+- [ ] `PATCH /api/characters/{id}/deactivate`
+- [ ] `PATCH /api/characters/{id}/reactivate`
+- [ ] `GET /api/characters/guild-board`
+
 ## Frontend
 
 ### Ainda nao iniciado
@@ -190,16 +254,20 @@ API ASP.NET 8 para gerenciamento de uma unica guild de MU Online, com cadastro c
 - [ ] Criar tela de listagem de usuarios.
 - [ ] Criar tela de alteracao de cargo.
 - [ ] Criar tela de geracao e listagem de `ClaCodes`.
+- [ ] Criar painel de personagens do usuario com carrossel de chars ativos.
+- [ ] Criar tela de criacao e edicao de personagem.
+- [ ] Criar tela de personagens inativos do usuario.
+- [ ] Criar mural geral da guild agrupando personagens por usuario.
 - [ ] Armazenar e enviar JWT nas requisicoes.
 
 ## Proximos passos recomendados
 
 1. Finalizar o tratamento global de erros nos controllers.
-2. Aplicar as regras finais de `DEV` e inativacao.
-3. Implementar a listagem de usuarios com filtro por status.
-4. Melhorar validacoes de entrada.
-5. Adicionar logs melhores.
-6. Criar testes automatizados.
+2. Melhorar mensagens e padrao de erros.
+3. Adicionar validacoes de entrada mais fortes.
+4. Adicionar logs melhores.
+5. Criar testes automatizados.
+6. Modelar o modulo de personagens no backend.
 7. Iniciar o frontend.
 
 ## Referencias oficiais

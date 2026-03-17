@@ -49,6 +49,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ClaCodeService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<UserRoleService>();
+builder.Services.AddScoped<CharacterService>();
 
 var jwtKey = builder.Configuration["Jwt:Key"]
     ?? throw new InvalidOperationException("Jwt:Key nao configurado.");
@@ -87,6 +88,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
