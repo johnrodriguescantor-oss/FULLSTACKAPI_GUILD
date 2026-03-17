@@ -1,0 +1,26 @@
+# Build artifacts
+bin/
+obj/
+**/bin/
+**/obj/
+
+# IDE
+.vs/
+.vscode/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Test output
+TestResults/
+*.trx
+*.coverage
+
+# Logs
+*.log
+
+# Local config
+appsettings.*.local.json
